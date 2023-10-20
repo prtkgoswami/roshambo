@@ -8,6 +8,8 @@ import ActionsSection from "../components/ActionsSection";
 import ScoreBar from "../components/ScoreBar";
 import TimeBar from "../components/TimeBar";
 import {
+  HIGHTLIGHT_MODE_GAMES_CUTOFF,
+  HIGHTLIGHT_MODE_TIMEOUT,
   PLAY_OPTIONS_ADVANCED,
   PLAY_OPTIONS_BASIC,
   RULES,
@@ -32,6 +34,7 @@ export type GameState = {
   playerChoice: string;
   botChoice: string;
   playState: PlayState;
+  roundsPlayed: number;
 } & Score;
 
 const initialState: GameState = {
@@ -40,12 +43,14 @@ const initialState: GameState = {
   playerChoice: "none",
   botChoice: "none",
   playState: PlayState.ToStart,
+  roundsPlayed: 0,
 };
 
 const GameController = ({}: GameControllerProps): ReactElement => {
   const [gameState, setGameState] = useState<GameState>(initialState);
   const [isBasicGameplay, setBasicGameplay] = useState<boolean>(true);
   const [shouldShowRules, setShowRules] = useState<boolean>(false);
+  const [shouldHighlightMode, setHighlightMode] = useState<boolean>(false);
 
   const onRoundComplete = (
     roundScore: Score,
@@ -58,6 +63,7 @@ const GameController = ({}: GameControllerProps): ReactElement => {
       playerChoice: playerChoice,
       botChoice: botChoice,
       playState: PlayState.RoundComplete,
+      roundsPlayed: gameState.roundsPlayed + 1,
     });
   };
 
@@ -71,6 +77,7 @@ const GameController = ({}: GameControllerProps): ReactElement => {
       playerChoice: "none",
       botChoice: botSelect,
       playState: PlayState.RoundComplete,
+      roundsPlayed: gameState.roundsPlayed + 1,
     });
   };
 
@@ -85,9 +92,30 @@ const GameController = ({}: GameControllerProps): ReactElement => {
     setGameState(initialState);
   };
 
+  const modeBtnClick = () => {
+    if (shouldHighlightMode) {
+      setHighlightMode(false);
+    }
+    setBasicGameplay(!isBasicGameplay);
+  };
+
   useEffect(() => {
     resetGame();
   }, [isBasicGameplay]);
+
+  useEffect(() => {
+    if (gameState.roundsPlayed === HIGHTLIGHT_MODE_GAMES_CUTOFF) {
+      setHighlightMode(true);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (shouldHighlightMode) {
+      setTimeout(() => {
+        setHighlightMode(false);
+      }, HIGHTLIGHT_MODE_TIMEOUT);
+    }
+  }, [shouldHighlightMode]);
 
   return (
     <>
@@ -119,7 +147,7 @@ const GameController = ({}: GameControllerProps): ReactElement => {
             className={`w-14 h-14 relative cursor-pointer rounded-full ${
               !isBasicGameplay && "bg-gradient-radial"
             } from-amber-400 from-10% to-red-600`}
-            onClick={() => setBasicGameplay(!isBasicGameplay)}
+            onClick={modeBtnClick}
           >
             <Image
               src="/TBBT_Logo.png"
@@ -127,6 +155,11 @@ const GameController = ({}: GameControllerProps): ReactElement => {
               layout="fill"
               objectFit="contain"
             />
+            {shouldHighlightMode && (
+              <div className="absolute text-xs font-semibold px-2 py-1 bg-cyan-500 text-zinc-800 -top-5 -left-24 z-10 animate-bounce rounded-md rounded-br-none uppercase">
+                Change Mode
+              </div>
+            )}
           </div>
 
           <div

@@ -18,6 +18,9 @@ export const PLAY_OPTIONS_ADVANCED: Option = {
 
 export const PLAY_INTERVAL = 5;
 
+export const HIGHTLIGHT_MODE_GAMES_CUTOFF = 6;
+export const HIGHTLIGHT_MODE_TIMEOUT = 10000;
+
 export const RULES = {
   basic: (
     <>
