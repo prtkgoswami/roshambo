@@ -34,7 +34,7 @@ const ScoreBar = ({ gameState }: ScoreBarProps): React.ReactElement => {
           <p className="text-4xl text-cyan-500">{gameState.playerScore}</p>
         </div>
 
-        <div className="flex flex-row w-full text-6xl justify-center p-5">
+        <div className="flex flex-row w-full text-6xl justify-center p-5 text-zinc-200">
           {gameState.playState !== PlayState.Playing ? (
             <FontAwesomeIcon
               icon={CHOICE_MAP[gameState.playerChoice]}
@@ -55,7 +55,7 @@ const ScoreBar = ({ gameState }: ScoreBarProps): React.ReactElement => {
           <p className="text-4xl text-cyan-500">{gameState.botScore}</p>
         </div>
 
-        <div className="flex flex-row w-full text-6xl justify-center p-5">
+        <div className="flex flex-row w-full text-6xl justify-center p-5 text-zinc-200">
           {gameState.playState !== PlayState.Playing ? (
             <FontAwesomeIcon
               icon={CHOICE_MAP[gameState.botChoice]}

@@ -23,7 +23,7 @@ const OptionButton = ({
     <div
       className={`flex relative ${sizeClasses} justify-center items-center text-6xl border-2 border-solid ${
         isActive ? "border-cyan-500" : "border-zinc-600"
-      } rounded-full cursor-pointer shadow-cyan-500`}
+      } rounded-full cursor-pointer shadow-cyan-500 text-zinc-200`}
       onClick={() => onOptionSelect(optionString)}
       onMouseEnter={() => setOverlayVisibility(true && isActive)}
       onMouseLeave={() => setOverlayVisibility(false && isActive)}
